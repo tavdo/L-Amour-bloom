@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4efe6;
+  --foreground: #1c1914;
+  --muted: #6f675c;
+  --panel: #fffaf3;
+  --line: #e4d8c8;
+  --forest: #214033;
+  --forest-deep: #163028;
+  --clay: #b85c45;
+  --gold: #c4a574;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
+  --color-forest: var(--forest);
+  --color-forest-deep: var(--forest-deep);
+  --color-clay: var(--clay);
+  --color-gold: var(--gold);
+  --font-sans: var(--font-body), var(--font-body-ka), sans-serif;
+  --font-serif: var(--font-display), var(--font-display-ka), serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  min-height: 100%;
+  background-color: var(--background);
+}
+
+body {
+  background-color: transparent;
+  color: var(--foreground);
+  font-family: var(--font-body), "Noto Sans Georgian", sans-serif;
+}
+
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: var(--font-display), "Noto Serif Georgian", serif;
+  letter-spacing: -0.03em;
+}

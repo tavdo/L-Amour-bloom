@@ -1,0 +1,126 @@
+{
+  "Metadata": {
+    "title": "L'Amour Bloom — everlasting handmade flowers",
+    "description": "Preserved and mixed-media floral pieces delivered across Georgia. Bouquets, wall décor, wedding florals, and gift sets that never wilt."
+  },
+  "Nav": {
+    "home": "Home",
+    "catalog": "Shop",
+    "cart": "Cart",
+    "checkout": "Checkout",
+    "admin": "Admin",
+    "language": "Language",
+    "currency": "Currency"
+  },
+  "Home": {
+    "eyebrow": "Handmade · Georgia-wide delivery",
+    "title": "Flowers that never fade.",
+    "subtitle": "Preserved botanicals and mixed-media compositions, made to last and shipped to every region of Georgia — not only the big cities.",
+    "shopCta": "Browse the shop",
+    "storyCta": "Our materials",
+    "featured": "Featured pieces",
+    "categories": "Shop by collection",
+    "promiseTitle": "Why they travel so well",
+    "promise1Title": "They don’t wilt",
+    "promise1Body": "Preserved, dried, and mixed-media flowers keep their shape and colour. Overnight perishability is not a constraint.",
+    "promise2Title": "Georgia-wide",
+    "promise2Body": "We ship to Tbilisi, regional cities, and villages. Choose your region at checkout for an accurate delivery rate.",
+    "promise3Title": "Made, not mass-produced",
+    "promise3Body": "Each piece is assembled by hand. Variants let you pick size and colour without guessing from a single photo."
+  },
+  "Catalog": {
+    "title": "Catalog",
+    "all": "All collections",
+    "empty": "No pieces in this collection yet.",
+    "filter": "Collection"
+  },
+  "Product": {
+    "from": "From",
+    "size": "Size",
+    "color": "Colour",
+    "addToCart": "Add to cart",
+    "added": "Added to cart",
+    "outOfStock": "This variant is unavailable",
+    "description": "About this piece",
+    "shippingNote": "Does not wilt — we deliver across Georgia.",
+    "selectVariant": "Select size and colour"
+  },
+  "Cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "continue": "Continue shopping",
+    "checkout": "Go to checkout",
+    "remove": "Remove",
+    "quantity": "Qty",
+    "subtotal": "Subtotal",
+    "shippingHint": "Delivery is calculated at checkout by region."
+  },
+  "Checkout": {
+    "title": "Checkout",
+    "contact": "Contact",
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Delivery address",
+    "line1": "Street address",
+    "line2": "Apartment, floor (optional)",
+    "city": "City / village",
+    "region": "Delivery region",
+    "notes": "Notes for L'Amour Bloom",
+    "payment": "Payment method",
+    "payBog": "Bank of Georgia",
+    "payTbc": "TBC Bank",
+    "submit": "Pay now",
+    "subtotal": "Subtotal",
+    "shipping": "Delivery",
+    "total": "Total",
+    "payInGel": "Card payments are charged in GEL. USD prices are shown for reference.",
+    "emptyCart": "Add something to your cart before checking out.",
+    "error": "Could not start payment. Please try again."
+  },
+  "Order": {
+    "thanks": "Thank you",
+    "pending": "Waiting for payment confirmation",
+    "paid": "Payment received",
+    "failed": "Payment was not completed",
+    "number": "Order",
+    "status": "Status",
+    "backHome": "Back to the shop",
+    "pendingHint": "If you already paid, this page will update once the bank confirms. You can safely close this tab.",
+    "paidHint": "We will pack your order and ship it to the region you selected.",
+    "failedHint": "No charge was captured. You can return to checkout and try again."
+  },
+  "Footer": {
+    "tagline": "Everlasting botanicals, made in Georgia.",
+    "rights": "All rights reserved.",
+    "shipping": "We deliver to every region of Georgia."
+  },
+  "Admin": {
+    "loginTitle": "L'Amour Bloom admin",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "invalid": "Invalid email or password",
+    "dashboard": "Overview",
+    "products": "Products",
+    "orders": "Orders",
+    "shipping": "Shipping regions",
+    "admins": "Admins",
+    "newProduct": "New product",
+    "save": "Save",
+    "saved": "Saved",
+    "status": "Status",
+    "published": "Published",
+    "draft": "Draft"
+  },
+  "Status": {
+    "PENDING_PAYMENT": "Awaiting payment",
+    "PAID": "Paid",
+    "FAILED": "Payment failed",
+    "CANCELLED": "Cancelled",
+    "PROCESSING": "Processing",
+    "SHIPPED": "Shipped",
+    "DELIVERED": "Delivered"
+  }
+}

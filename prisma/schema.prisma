@@ -1,0 +1,204 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  FAILED
+  CANCELLED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+}
+
+enum PaymentProvider {
+  BOG
+  TBC
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Category {
+  id           String                @id @default(cuid())
+  slug         String                @unique
+  sortOrder    Int                   @default(0)
+  translations CategoryTranslation[]
+  products     Product[]
+}
+
+model CategoryTranslation {
+  id          String   @id @default(cuid())
+  categoryId  String
+  locale      String
+  name        String
+  description String   @default("")
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+  @@index([locale])
+}
+
+model Product {
+  id           String               @id @default(cuid())
+  slug         String               @unique
+  sku          String?              @unique
+  status       ProductStatus        @default(DRAFT)
+  categoryId   String
+  category     Category             @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  priceGel     Int
+  priceUsd     Int
+  featured     Boolean              @default(false)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  translations ProductTranslation[]
+  images       ProductImage[]
+  variants     ProductVariant[]
+  orderItems   OrderItem[]
+}
+
+model ProductTranslation {
+  id          String  @id @default(cuid())
+  productId   String
+  locale      String
+  name        String
+  description String  @db.Text
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, locale])
+  @@index([locale])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  url       String
+  alt       String  @default("")
+  sortOrder Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductVariant {
+  id         String      @id @default(cuid())
+  productId  String
+  sku        String?
+  size       String?
+  color      String?
+  colorHex   String?
+  stock      Int         @default(0)
+  priceGel   Int?
+  priceUsd   Int?
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+}
+
+model ShippingRegion {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  nameEn    String
+  nameKa    String
+  priceGel  Int
+  priceUsd  Int
+  sortOrder Int     @default(0)
+  active    Boolean @default(true)
+  orders    Order[]
+}
+
+model Order {
+  id               String           @id @default(cuid())
+  number           String           @unique
+  status           OrderStatus      @default(PENDING_PAYMENT)
+  locale           String
+  customerName     String
+  customerEmail    String
+  customerPhone    String
+  addressLine1     String
+  addressLine2     String           @default("")
+  city             String
+  notes            String           @default("")
+  shippingRegionId String
+  shippingRegion   ShippingRegion   @relation(fields: [shippingRegionId], references: [id], onDelete: Restrict)
+  subtotalGel      Int
+  shippingGel      Int
+  totalGel         Int
+  subtotalUsd      Int
+  shippingUsd      Int
+  totalUsd         Int
+  displayCurrency  String           @default("GEL")
+  paymentProvider  PaymentProvider?
+  paymentStatus    PaymentStatus    @default(PENDING)
+  providerOrderId  String?
+  paidAt           DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  items            OrderItem[]
+  paymentEvents    PaymentEvent[]
+
+  @@index([customerEmail])
+  @@index([status])
+  @@index([providerOrderId])
+}
+
+model OrderItem {
+  id           String          @id @default(cuid())
+  orderId      String
+  productId    String
+  variantId    String?
+  name         String
+  quantity     Int
+  unitPriceGel Int
+  unitPriceUsd Int
+  order        Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product      Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
+  variant      ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+}
+
+model PaymentEvent {
+  id             String          @id @default(cuid())
+  orderId        String?
+  provider       PaymentProvider
+  idempotencyKey String          @unique
+  payload        Json
+  createdAt      DateTime        @default(now())
+  order          Order?          @relation(fields: [orderId], references: [id], onDelete: SetNull)
+}
+
+model AdminUser {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime       @default(now())
+  sessions     AdminSession[]
+}
+
+model AdminSession {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  adminId   String
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  admin     AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+}
+
+model SiteSetting {
+  key   String @id
+  value String
+}
