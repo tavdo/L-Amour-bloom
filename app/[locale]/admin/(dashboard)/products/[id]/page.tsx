@@ -12,7 +12,11 @@ export default async function EditProductPage({
   const [product, categories] = await Promise.all([
     prisma.product.findUnique({
       where: { id },
-      include: { translations: true, images: { orderBy: { sortOrder: "asc" } } },
+      include: {
+        translations: true,
+        images: { orderBy: { sortOrder: "asc" } },
+        variants: { orderBy: { id: "asc" } },
+      },
     }),
     prisma.category.findMany({ include: { translations: true }, orderBy: { sortOrder: "asc" } }),
   ]);
@@ -25,6 +29,7 @@ export default async function EditProductPage({
       <h1 className="mb-6 font-serif text-4xl text-forest">Edit product</h1>
       <ProductEditor
         categories={categories}
+        hasMultipleVariants={product.variants.length > 1}
         product={{
           id: product.id,
           slug: product.slug,
@@ -32,8 +37,9 @@ export default async function EditProductPage({
           categoryId: product.categoryId,
           status: product.status,
           featured: product.featured,
-          priceGel: product.priceGel,
-          priceUsd: product.priceUsd,
+          priceGel: product.priceGel / 100,
+          priceUsd: product.priceUsd / 100,
+          stock: product.variants[0]?.stock ?? 0,
           nameEn: en?.name ?? "",
           nameKa: ka?.name ?? "",
           descriptionEn: en?.description ?? "",

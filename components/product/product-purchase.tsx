@@ -52,7 +52,7 @@ export function ProductPurchase({
   const priceGel = variant?.priceGel ?? basePriceGel;
   const priceUsd = variant?.priceUsd ?? basePriceUsd;
   const price = currency === "USD" ? priceUsd : priceGel;
-  const outOfStock = (variant?.stock ?? 0) <= 0;
+  const outOfStock = variants.length > 0 && (variant?.stock ?? 0) <= 0;
 
   function selectSize(size: string) {
     const next =

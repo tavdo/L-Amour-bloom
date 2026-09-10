@@ -39,14 +39,19 @@ const productSchema = z.object({
   categoryId: z.string(),
   status: z.enum(["DRAFT", "PUBLISHED"]),
   featured: z.boolean(),
-  priceGel: z.number().int().nonnegative(),
-  priceUsd: z.number().int().nonnegative(),
+  priceGel: z.number().nonnegative(),
+  priceUsd: z.number().nonnegative(),
+  stock: z.number().int().nonnegative(),
   nameEn: z.string().min(2),
   nameKa: z.string().min(2),
   descriptionEn: z.string(),
   descriptionKa: z.string(),
   imageUrls: z.array(z.string().url()).max(8),
 });
+
+function toMinorUnits(major: number) {
+  return Math.round(major * 100);
+}
 
 export async function saveProductAction(input: z.infer<typeof productSchema>) {
   const admin = await getCurrentAdmin();
@@ -60,8 +65,8 @@ export async function saveProductAction(input: z.infer<typeof productSchema>) {
     categoryId: data.categoryId,
     status: data.status,
     featured: data.featured,
-    priceGel: data.priceGel,
-    priceUsd: data.priceUsd,
+    priceGel: toMinorUnits(data.priceGel),
+    priceUsd: toMinorUnits(data.priceUsd),
   };
 
   const product = data.id
@@ -89,9 +94,44 @@ export async function saveProductAction(input: z.infer<typeof productSchema>) {
     })),
   });
 
+  const variants = await prisma.productVariant.findMany({
+    where: { productId: product.id },
+    orderBy: { id: "asc" },
+  });
+  if (variants.length === 0) {
+    await prisma.productVariant.create({
+      data: { productId: product.id, stock: data.stock },
+    });
+  } else if (variants.length === 1) {
+    await prisma.productVariant.update({
+      where: { id: variants[0].id },
+      data: { stock: data.stock },
+    });
+  }
+
   updateTag(CACHE_TAGS.products);
   updateTag(CACHE_TAGS.product(product.slug));
   return { id: product.id };
+}
+
+export async function deleteProductAction(id: string) {
+  const admin = await getCurrentAdmin();
+  if (!admin) throw new Error("Unauthorized");
+  const prisma = getPrisma();
+  const product = await prisma.product.findUnique({
+    where: { id },
+    select: { slug: true, _count: { select: { orderItems: true } } },
+  });
+  if (!product) throw new Error("Product not found");
+  if (product._count.orderItems > 0) {
+    throw new Error(
+      "This product is on existing orders. Set it to Draft to hide it from the shop.",
+    );
+  }
+
+  await prisma.product.delete({ where: { id } });
+  updateTag(CACHE_TAGS.products);
+  updateTag(CACHE_TAGS.product(product.slug));
 }
 
 export async function uploadImageAction(formData: FormData) {

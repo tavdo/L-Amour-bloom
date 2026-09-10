@@ -112,7 +112,9 @@
     "saved": "Saved",
     "status": "Status",
     "published": "Published",
-    "draft": "Draft"
+    "draft": "Draft",
+    "remove": "Remove",
+    "newProductHint": "No products yet. Add one to show it on the shop."
   },
   "Status": {
     "PENDING_PAYMENT": "Awaiting payment",

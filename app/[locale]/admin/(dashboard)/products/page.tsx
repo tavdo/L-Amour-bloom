@@ -1,5 +1,6 @@
 import { getPrisma } from "@/lib/db";
 import { Link } from "@/i18n/navigation";
+import { DeleteProductButton } from "./delete-product-button";
 
 export default async function AdminProductsPage() {
   const products = await getPrisma().product.findMany({
@@ -15,23 +16,34 @@ export default async function AdminProductsPage() {
           New product
         </Link>
       </div>
-      <ul className="mt-6 divide-y divide-line rounded-3xl border border-line bg-panel">
-        {products.map((product) => (
-          <li key={product.id} className="flex items-center justify-between px-4 py-3">
-            <div>
-              <p className="font-medium">
-                {product.translations.find((item) => item.locale === "en")?.name ?? product.slug}
-              </p>
-              <p className="text-sm text-muted">
-                {product.status} · {product.slug}
-              </p>
-            </div>
-            <Link href={`/admin/products/${product.id}`} className="text-sm text-forest">
-              Edit
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {products.length === 0 ? (
+        <p className="mt-6 rounded-3xl border border-line bg-panel px-4 py-8 text-muted">
+          No products yet. Add one to show it on the shop.
+        </p>
+      ) : (
+        <ul className="mt-6 divide-y divide-line rounded-3xl border border-line bg-panel">
+          {products.map((product) => {
+            const name =
+              product.translations.find((item) => item.locale === "en")?.name ?? product.slug;
+            return (
+              <li key={product.id} className="flex items-center justify-between gap-3 px-4 py-3">
+                <div>
+                  <p className="font-medium">{name}</p>
+                  <p className="text-sm text-muted">
+                    {product.status} · {product.slug}
+                  </p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Link href={`/admin/products/${product.id}`} className="text-sm text-forest">
+                    Edit
+                  </Link>
+                  <DeleteProductButton id={product.id} name={name} />
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }
