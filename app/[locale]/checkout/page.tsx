@@ -8,7 +8,8 @@ export default async function CheckoutPage() {
   let regions;
   try {
     regions = await getShippingRegions();
-  } catch {
+  } catch (error) {
+    console.error("[checkout] database unavailable", error);
     return <SetupHint />;
   }
   return <CheckoutForm regions={regions} />;

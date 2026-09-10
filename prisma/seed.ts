@@ -15,6 +15,14 @@ const img = (id: string, extra = "") =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=80${extra}`;
 
 async function main() {
+  if (process.env.SEED_IF_EMPTY === "1") {
+    const existing = await prisma.category.count();
+    if (existing > 0) {
+      console.log("Database already has catalog data; skipping seed.");
+      return;
+    }
+  }
+
   const adminEmail = (process.env.ADMIN_EMAIL ?? "admin@example.com").toLowerCase();
   const adminPassword = process.env.ADMIN_PASSWORD ?? "changeme-admin";
 

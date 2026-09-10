@@ -24,7 +24,8 @@ export default async function HomePage({
       getCategories(locale as AppLocale),
       getPublishedProducts({ featured: true, locale: locale as AppLocale }),
     ]);
-  } catch {
+  } catch (error) {
+    console.error("[home] database unavailable", error);
     return <SetupHint />;
   }
 

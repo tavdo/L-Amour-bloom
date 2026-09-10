@@ -27,7 +27,8 @@ export default async function CatalogPage({
         categorySlug: category,
       }),
     ]);
-  } catch {
+  } catch (error) {
+    console.error("[catalog] database unavailable", error);
     return <SetupHint />;
   }
 

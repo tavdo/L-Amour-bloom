@@ -1,10 +1,8 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
+import { resolveDirectDatabaseUrl } from "./lib/prisma-adapter";
 
-const datasourceUrl =
-  process.env.DATABASE_URL_UNPOOLED ||
-  process.env.DATABASE_URL ||
-  "postgresql://postgres:postgres@localhost:5432/atelier?sslmode=disable";
+const datasourceUrl = resolveDirectDatabaseUrl();
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
